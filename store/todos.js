@@ -1,14 +1,17 @@
+import Vuex from 'vuex'
+import { db } from '@/plugins/firebase'
+
 export const state = () => ({
   list: [
-    { text: 'hogeeeee', done: false },
-    { text: 'fooooooo', done: false },
-    { text: 'qqqqqqqqq', done: true },
-    { text: 'yuyuyiyiuiy', done: false }
+    // { text: 'hogeeeee', done: false },
+    // { text: 'fooooooo', done: false },
+    // { text: 'qqqqqqqqq', done: true },
+    // { text: 'yuyuyiyiuiy', done: false }
   ]
 })
 
 export const mutations = {
-  setFB(state, todo) {
+  initFirebase(state, todo) {
     state.list.push(todo)
   },
   add(state, text) {
@@ -23,5 +26,14 @@ export const mutations = {
   },
   toggle(state, todo) {
     todo.done = !todo.done
+  }
+}
+
+export const actions = {
+  async loadFirebase(state, payload) {
+    const snapshot = await db.collection('todos').get()
+    snapshot.forEach(doc => {
+      state.commit('initFirebase', doc.data())
+    })
   }
 }

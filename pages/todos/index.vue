@@ -43,13 +43,8 @@ export default {
       return this.$store.state.todos.list
     }
   },
-  async mounted() {
-    const snapshot = await db.collection('todos').get()
-    snapshot.forEach(doc => {
-      this.$store.commit('todos/setFB', doc.data())
-      // console.log(doc.data())
-    })
-    console.log(this.todos)
+  mounted() {
+    this.$store.dispatch('todos/loadFirebase')
   },
   methods: {
     addTodo() {
