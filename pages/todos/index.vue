@@ -15,7 +15,7 @@
       <v-col cols="12" sm="10" md="8">
         <v-card class="elevation-10 mb-2" v-for="todo in todos" :key="todo.id">
           <v-card-title>
-            <v-checkbox v-model="todo.isDone"> </v-checkbox>
+            <v-checkbox :input-value="todo.isDone" @change="toggle(todo)" color="blue"> </v-checkbox>
             <span :class="{ done: todo.isDone }">{{ todo.text }}</span>
             <v-spacer></v-spacer>
             <v-card-actions>
@@ -29,30 +29,30 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
+
 export default {
   data() {
     return {
-      todos: [
-        { text: 'hogeeeee', isDone: false },
-        { text: 'qqqqqqqqq', isDone: true },
-        { text: 'fooooooo', isDone: false },
-        { text: 'yuyuyiyiuiy', isDone: false }
-      ],
       newTodo: ''
+    }
+  },
+  computed: {
+    todos() {
+      return this.$store.state.todos.list
     }
   },
   methods: {
     addTodo() {
-      this.todos.push({ text: this.newTodo, isDone: false })
+      this.$store.commit('todos/add', this.newTodo)
       this.newTodo = ''
     },
     deleteTodo(todo) {
-      // this.$store.commit('todos/remove', todo)
-      this.todos.splice(this.todos.indexOf(todo), 1)
-    }
-    // ...mapMutations({
-    //   toggle: 'todos/toggle'
-    // })
+      this.$store.commit('todos/remove', todo)
+    },
+    ...mapMutations({
+      toggle: 'todos/toggle'
+    })
   }
 }
 </script>
