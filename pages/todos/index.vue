@@ -15,8 +15,8 @@
       <v-col cols="12" sm="10" md="8">
         <v-card class="elevation-10 mb-2" v-for="todo in todos" :key="todo.id">
           <v-card-title>
-            <v-checkbox :input-value="todo.isDone" @change="toggle(todo)" color="blue"> </v-checkbox>
-            <span :class="{ done: todo.isDone }">{{ todo.text }}</span>
+            <v-checkbox :input-value="todo.done" @change="toggle(todo)" color="blue"></v-checkbox>
+            <span :class="{ done: todo.done }">{{ todo.text }}</span>
             <v-spacer></v-spacer>
             <v-card-actions>
               <v-btn @click="deleteTodo(todo)" color="orange darken-4" text>Delete</v-btn>
@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import { db } from '@/plugins/firebase'
 import { mapMutations } from 'vuex'
 
 export default {
@@ -41,6 +42,14 @@ export default {
     todos() {
       return this.$store.state.todos.list
     }
+  },
+  async mounted() {
+    const snapshot = await db.collection('todos').get()
+    snapshot.forEach(doc => {
+      this.$store.commit('todos/setFB', doc.data())
+      // console.log(doc.data())
+    })
+    console.log(this.todos)
   },
   methods: {
     addTodo() {
