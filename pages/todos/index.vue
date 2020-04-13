@@ -6,7 +6,7 @@
       </v-col>
       <v-col cols="12" sm="10" md="8">
         <v-card class="elevation-10">
-          <v-text-field @keyup.enter="addTodo" v-model="newTodo" placeholder="add task..." class="mx-5"></v-text-field>
+          <v-text-field @keyup.enter="addTodo" v-model="newTodo" placeholder="add task..." color="blue" class="mx-5"></v-text-field>
         </v-card>
       </v-col>
     </v-row>
@@ -48,15 +48,20 @@ export default {
   },
   methods: {
     addTodo() {
-      this.$store.commit('todos/add', this.newTodo)
+      this.$store.dispatch('todos/add', this.newTodo)
       this.newTodo = ''
     },
     deleteTodo(todo) {
+      this.$store.dispatch('todos/delete', todo)
       this.$store.commit('todos/remove', todo)
     },
-    ...mapMutations({
-      toggle: 'todos/toggle'
-    })
+    // ...mapMutations({
+    //   toggle: 'todos/toggle'
+    // })
+    toggle(todo) {
+      console.log(todo)
+      this.$store.dispatch('todos/toggle', todo)
+    }
   }
 }
 </script>
