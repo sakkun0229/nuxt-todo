@@ -12,7 +12,7 @@ export const mutations = {
   add(state, todo) {
     state.list.unshift(todo)
   },
-  remove(state, todo) {
+  delete(state, todo) {
     // console.log(state.list.indexOf(todo))
     state.list.splice(state.list.indexOf(todo), 1)
   },
@@ -27,11 +27,6 @@ export const actions = {
     snapshot.forEach(doc => {
       state.commit('initFirebase', { id: doc.id, ...doc.data() })
     })
-    // db.collection('todos').onSnapshot(snapshot => {
-    //   snapshot.docChanges().forEach(change => {
-    //     state.commit('initFirebase', { id: doc.id, ...doc.data() })
-    //   })
-    // })
   },
   add(state, text) {
     const newRef = db.collection('todos').doc()
@@ -42,8 +37,12 @@ export const actions = {
     newRef.set(newTodo)
     state.commit('add', { id: newRef.id, ...newTodo })
   },
-  delete() {
-    console.log('delete action')
+  delete(state, todo) {
+    const ref = db.collection('todos').doc(todo.id)
+    ref.delete().then(() => {
+      console.log('Document successfully deleted!')
+    })
+    state.commit('delete', todo)
   },
   toggle(state, todo) {
     console.log('toggle action')
