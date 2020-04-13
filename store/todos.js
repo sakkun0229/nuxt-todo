@@ -22,7 +22,10 @@ export const mutations = {
 
 export const actions = {
   async loadFirebase(state, payload) {
-    const snapshot = await db.collection('todos').get()
+    const snapshot = await db
+      .collection('todos')
+      .orderBy('date', 'asc')
+      .get()
     snapshot.forEach(doc => {
       state.commit('initFirebase', { id: doc.id, ...doc.data() })
     })
@@ -31,7 +34,8 @@ export const actions = {
     const newRef = db.collection('todos').doc()
     const newTodo = {
       text: text,
-      done: false
+      done: false,
+      date: new Date()
     }
     newRef.set(newTodo)
     state.commit('add', { id: newRef.id, ...newTodo })
