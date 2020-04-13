@@ -13,7 +13,6 @@ export const mutations = {
     state.list.unshift(todo)
   },
   delete(state, todo) {
-    // console.log(state.list.indexOf(todo))
     state.list.splice(state.list.indexOf(todo), 1)
   },
   toggle(state, todo) {
@@ -45,8 +44,11 @@ export const actions = {
     state.commit('delete', todo)
   },
   toggle(state, todo) {
-    console.log('toggle action')
-    console.log(todo)
+    const bl = !todo.done
+    const ref = db.collection('todos').doc(todo.id)
+    ref.update({
+      done: bl
+    })
     state.commit('toggle', todo)
   }
 }
