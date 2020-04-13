@@ -48,8 +48,11 @@ export default {
   },
   methods: {
     addTodo() {
-      this.$store.dispatch('todos/add', this.newTodo)
-      this.newTodo = ''
+      const str = this.newTodo.trim()
+      if (str.length > 0) {
+        this.$store.dispatch('todos/add', str)
+        this.newTodo = ''
+      }
     },
     deleteTodo(todo) {
       this.$store.dispatch('todos/delete', todo)
