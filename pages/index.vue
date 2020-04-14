@@ -1,63 +1,86 @@
 <template>
-  <div class="container">
-    <div>
-      <logo />
-      <h1 class="title">
-        nuxt-todo
-      </h1>
-      <h2 class="subtitle">
-        My dazzling Nuxt.js project
-      </h2>
-      <div class="links">
-        <a href="https://nuxtjs.org/" target="_blank" class="button--green">
-          Documentation
-        </a>
-        <a href="https://github.com/nuxt/nuxt.js" target="_blank" class="button--grey">
-          GitHub
-        </a>
-      </div>
-    </div>
-  </div>
+  <v-container fluid blue lighten-3 class="fill-height">
+    <v-row justify="center">
+      <v-col cols="12" sm="10" md="8">
+        <h1 align="center" class="display-4 white--text">TODO APP</h1>
+      </v-col>
+    </v-row>
+
+    <v-row justify="center">
+      <v-col cols="12" sm="10" md="8">
+        <v-card class="elevation-10 px-1">
+          <v-row no-gutters align="center">
+            <v-col cols="10" class="pl-2">
+              <v-text-field v-model="newTodo" placeholder="add task..." color="blue"> </v-text-field>
+            </v-col>
+            <v-col cols="2" class="text-center">
+              <v-btn @click="addTodo" color="green" x-small outlined>Add</v-btn>
+            </v-col>
+          </v-row>
+        </v-card>
+      </v-col>
+    </v-row>
+
+    <v-row justify="center">
+      <v-col cols="12" sm="10" md="8">
+        <v-card class="elevation-10 mb-2 px-2" v-for="todo in todos" :key="todo.id">
+          <v-row no-gutters align="center" justify="space-between">
+            <v-col cols="1">
+              <v-checkbox :input-value="todo.done" @change="toggle(todo)" color="light-blue"></v-checkbox>
+            </v-col>
+            <v-col cols="9" sm="9">
+              <v-card-title>
+                <span :class="{ done: todo.done }">{{ todo.text }}</span>
+              </v-card-title>
+            </v-col>
+            <v-col cols="2" class="text-center">
+              <v-btn @click="deleteTodo(todo)" color="orange darken-2" x-small outlined>Delete</v-btn>
+            </v-col>
+          </v-row>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
+import { db } from '@/plugins/firebase'
+import { mapMutations } from 'vuex'
 
 export default {
-  components: {
-    Logo
+  data() {
+    return {
+      newTodo: ''
+    }
+  },
+  computed: {
+    todos() {
+      return this.$store.state.todos.list
+    }
+  },
+  mounted() {
+    this.$store.dispatch('todos/loadFirebase')
+  },
+  methods: {
+    addTodo() {
+      const str = this.newTodo.trim()
+      if (str.length > 0) {
+        this.$store.dispatch('todos/add', str)
+        this.newTodo = ''
+      }
+    },
+    deleteTodo(todo) {
+      this.$store.dispatch('todos/delete', todo)
+    },
+    toggle(todo) {
+      this.$store.dispatch('todos/toggle', todo)
+    }
   }
 }
 </script>
 
 <style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
+.done {
+  text-decoration: line-through;
 }
 </style>
