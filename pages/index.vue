@@ -1,20 +1,21 @@
 <template>
   <v-container fluid blue lighten-3 class="fill-height">
+    <!-- <v-container fluid blue lighten-3 class="fill"> -->
     <v-row justify="center">
       <v-col cols="12" sm="10" md="8">
-        <h1 align="center" class="display-4 white--text">TODO APP</h1>
+        <h1 align="center" class="display-4 white--text font-weight-bold">TODO APP</h1>
       </v-col>
     </v-row>
 
     <v-row justify="center">
       <v-col cols="12" sm="10" md="8">
-        <v-card class="elevation-10 px-1">
-          <v-row no-gutters align="center">
-            <v-col cols="10" class="pl-2">
-              <v-text-field v-model="newTodo" placeholder="add task..." color="blue"> </v-text-field>
+        <v-card class="elevation-10 px-2">
+          <v-row no-gutters align="center" justify="space-around">
+            <v-col cols="10" class="pl-3">
+              <v-text-field v-model="newTodo" placeholder="add task..." color="light-blue"> </v-text-field>
             </v-col>
-            <v-col cols="2" class="text-center">
-              <v-btn @click="addTodo" color="green" x-small outlined>Add</v-btn>
+            <v-col cols="auto" class="text-center">
+              <v-btn @click="addTodo" color="light-blue" x-small outlined>Add</v-btn>
             </v-col>
           </v-row>
         </v-card>
@@ -28,12 +29,12 @@
             <v-col cols="1">
               <v-checkbox :input-value="todo.done" @change="toggle(todo)" color="light-blue"></v-checkbox>
             </v-col>
-            <v-col cols="9" sm="9">
+            <v-col cols="8" sm="9">
               <v-card-title>
                 <span :class="{ done: todo.done }">{{ todo.text }}</span>
               </v-card-title>
             </v-col>
-            <v-col cols="2" class="text-center">
+            <v-col cols="auto" class="text-center">
               <v-btn @click="deleteTodo(todo)" color="orange darken-2" x-small outlined>Delete</v-btn>
             </v-col>
           </v-row>
@@ -83,4 +84,7 @@ export default {
 .done {
   text-decoration: line-through;
 }
+/* .fill {
+  min-height: 100vh;
+} */
 </style>
