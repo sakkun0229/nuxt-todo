@@ -10,11 +10,11 @@
       <v-col cols="12" sm="10" md="8">
         <v-card class="elevation-10 px-1">
           <v-row no-gutters align="center">
-            <v-col cols="10" class="pl-2 re">
-              <v-text-field @keyup.enter="addTodo" v-model="newTodo" placeholder="add task..." color="blue" class=""> </v-text-field>
+            <v-col cols="10" class="pl-2">
+              <v-text-field v-model="newTodo" placeholder="add task..." color="blue"> </v-text-field>
             </v-col>
-            <v-col cols="2" class="text-center yello">
-              <v-btn color="green" x-small outlined>Add</v-btn>
+            <v-col cols="2" class="text-center">
+              <v-btn @click="addTodo" color="green" x-small outlined>Add</v-btn>
             </v-col>
           </v-row>
         </v-card>
@@ -23,7 +23,7 @@
 
     <v-row justify="center">
       <v-col cols="12" sm="10" md="8">
-        <v-card class="elevation-10 mb-2 px-2 pr-" v-for="todo in todos" :key="todo.id">
+        <v-card class="elevation-10 mb-2 px-2" v-for="todo in todos" :key="todo.id">
           <v-row no-gutters align="center" justify="space-between">
             <v-col cols="1">
               <v-checkbox :input-value="todo.done" @change="toggle(todo)" color="light-blue"></v-checkbox>
