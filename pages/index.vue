@@ -45,7 +45,8 @@
 </template>
 
 <script>
-import { firebase, db } from '@/plugins/firebase'
+import firebase from 'firebase'
+import db from '../plugins/firebase'
 
 export default {
   data() {
