@@ -43,5 +43,13 @@ export default {
      ** You can extend webpack config here
      */
     extend(config, ctx) {}
+  },
+  env: {
+    FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
+    FIREBASE_AUTH_DOMAIN: process.env.FIREBASE_AUTH_DOMAIN,
+    FIREBASE_DATABASEURL: process.env.FIREBASE_DATABASEURL,
+    FIREBASE_PROJECTID: process.env.FIREBASE_PROJECTID,
+    FIREBASE_STORAGEBUCKET: process.env.FIREBASE_STORAGEBUCKET,
+    FIREBASE_MESSAGINGSENDERID: process.env.FIREBASE_MESSAGINGSENDERID
   }
 }

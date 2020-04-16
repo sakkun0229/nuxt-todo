@@ -45,8 +45,7 @@
 </template>
 
 <script>
-import { db } from '@/plugins/firebase'
-import { mapMutations } from 'vuex'
+import { firebase, db } from '@/plugins/firebase'
 
 export default {
   data() {
