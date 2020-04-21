@@ -1,6 +1,5 @@
 <template>
   <v-container fluid blue lighten-3 class="fill-height">
-    <!-- <v-container fluid blue lighten-3 class="fill"> -->
     <v-row justify="center">
       <v-col cols="12" sm="10" md="8">
         <h1 align="center" class="display-4 white--text font-weight-bold">TODO APP</h1>
@@ -24,21 +23,23 @@
 
     <v-row justify="center">
       <v-col cols="12" sm="10" md="8">
-        <v-card class="elevation-10 mb-2 px-2" v-for="todo in todos" :key="todo.id">
-          <v-row no-gutters align="center" justify="space-between">
-            <v-col cols="1">
-              <v-checkbox :input-value="todo.done" @change="toggle(todo)" color="light-blue"></v-checkbox>
-            </v-col>
-            <v-col cols="8" sm="9">
-              <v-card-title>
-                <span :class="{ done: todo.done }">{{ todo.text }}</span>
-              </v-card-title>
-            </v-col>
-            <v-col cols="auto" class="text-center">
-              <v-btn @click="deleteTodo(todo)" color="orange darken-2" x-small outlined>Delete</v-btn>
-            </v-col>
-          </v-row>
-        </v-card>
+        <transition-group appear name="todos" @before-leave="beforeLeave">
+          <v-card class="elevation-10 mb-2 px-2 todo" v-for="todo in todos" :key="todo.id">
+            <v-row no-gutters align="center" justify="space-between">
+              <v-col cols="1">
+                <v-checkbox :input-value="todo.done" @change="toggle(todo)" color="light-blue"></v-checkbox>
+              </v-col>
+              <v-col cols="8" sm="9">
+                <v-card-title>
+                  <span :class="{ done: todo.done }">{{ todo.text }}</span>
+                </v-card-title>
+              </v-col>
+              <v-col cols="auto" class="text-center">
+                <v-btn @click="deleteTodo(todo)" color="orange darken-2" x-small outlined>Delete</v-btn>
+              </v-col>
+            </v-row>
+          </v-card>
+        </transition-group>
       </v-col>
     </v-row>
   </v-container>
@@ -46,7 +47,7 @@
 
 <script>
 import firebase from 'firebase'
-import db from '../plugins/firebase'
+import db from '@/plugins/firebase'
 
 export default {
   data() {
@@ -71,20 +72,44 @@ export default {
       }
     },
     deleteTodo(todo) {
-      this.$store.dispatch('todos/delete', todo)
+      // this.$store.dispatch('todos/delete', todo)
+      this.$store.commit('todos/delete', todo)
     },
     toggle(todo) {
       this.$store.dispatch('todos/toggle', todo)
+    },
+    beforeLeave(el) {
+      const { marginLeft, marginTop, width, height } = window.getComputedStyle(el)
+      el.style.left = `${el.offsetLeft - parseFloat(marginLeft, 10)}px`
+      el.style.top = `${el.offsetTop - parseFloat(marginTop, 10)}px`
+      el.style.width = width
+      el.style.height = height
     }
   }
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 .done {
   text-decoration: line-through;
 }
-/* .fill {
-  min-height: 100vh;
-} */
+
+.todos {
+  &-enter {
+    opacity: 0;
+    transform: scale(0.5) translateX(80%);
+  }
+  &-leave {
+    &-to {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+    &-active {
+      position: absolute;
+    }
+  }
+}
+.todo {
+  transition: 0.6s ease;
+}
 </style>
