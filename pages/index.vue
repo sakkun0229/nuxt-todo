@@ -23,8 +23,8 @@
 
     <v-row justify="center">
       <v-col cols="12" sm="10" md="8">
-        <transition-group appear name="todos" @before-leave="beforeLeave">
-          <v-card class="elevation-10 mb-2 px-2 todo" v-for="todo in todos" :key="todo.id">
+        <transition-group appear name="todos" @before-enter="beforeEnter" @after-enter="afterEnter" @before-leave="beforeLeave">
+          <v-card class="elevation-10 mb-2 px-2 todo" v-for="(todo, index) in todos" :key="todo.id" :data-index="index">
             <v-row no-gutters align="center" justify="space-between">
               <v-col cols="1">
                 <v-checkbox :input-value="todo.done" @change="toggle(todo)" color="light-blue"></v-checkbox>
@@ -72,11 +72,17 @@ export default {
       }
     },
     deleteTodo(todo) {
-      // this.$store.dispatch('todos/delete', todo)
-      this.$store.commit('todos/delete', todo)
+      this.$store.dispatch('todos/delete', todo)
+      // this.$store.commit('todos/delete', todo) //テスト用
     },
     toggle(todo) {
       this.$store.dispatch('todos/toggle', todo)
+    },
+    beforeEnter(el) {
+      el.style.transitionDelay = 100 * parseInt(el.dataset.index, 10) + 'ms'
+    },
+    afterEnter(el) {
+      el.style.transitionDelay = ''
     },
     beforeLeave(el) {
       const { marginLeft, marginTop, width, height } = window.getComputedStyle(el)
